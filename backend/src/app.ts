@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import { TedTalksAPIService } from "./talks";
+import { TedTalk } from "./types";
 
 const app = express();
 const port = 8888;
@@ -11,14 +12,14 @@ app.get("/", (req: Request, res: Response, next: NextFunction) =>
 );
 
 app.get("/talks", async (req: Request, res: Response, next: NextFunction) => {
-  const data = await TedTalksAPIService.find();
+  const data: TedTalk[] = await TedTalksAPIService.find();
   return res.status(200).json(data);
 });
 
 app.get(
   "/talks/count",
   async (req: Request, res: Response, next: NextFunction) => {
-    const data = await TedTalksAPIService.count();
+    const data: number = await TedTalksAPIService.count();
     return res.status(200).json(data);
   }
 );
@@ -26,7 +27,17 @@ app.get(
 app.get(
   "/talks/search",
   async (req: Request, res: Response, next: NextFunction) => {
-    const data = await TedTalksAPIService.search({
+    const data: TedTalk[] = await TedTalksAPIService.search({
+      query: req.query.query as string,
+    });
+    return res.status(200).json(data);
+  }
+);
+
+app.get(
+  "/talks/autocomplete",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data: string[] = await TedTalksAPIService.autocomplete({
       query: req.query.query as string,
     });
     return res.status(200).json(data);
