@@ -8,7 +8,7 @@ import {
   AutocompleteResult,
 } from "@yext/answers-core";
 import "dotenv/config";
-import { TedTalk, TedTalkAPI } from "./types";
+import type { TedTalk, TedTalkAPI } from "./types";
 
 const { YEXT_API_KEY } = process.env;
 

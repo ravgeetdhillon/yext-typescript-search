@@ -14,4 +14,4 @@ type TedTalkAPI = {
   autocomplete: ({ query }: { query: string }) => Promise<string[]>;
 };
 
-export { TedTalk, TedTalkAPI };
+export type { TedTalk, TedTalkAPI };

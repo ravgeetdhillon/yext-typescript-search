@@ -1,9 +1,12 @@
 import express, { Request, Response, NextFunction } from "express";
+import cors from "cors";
 import { TedTalksAPIService } from "./talks";
-import { TedTalk } from "./types";
+import type { TedTalk } from "./types";
 
 const app = express();
 const port = 8888;
+
+app.use(cors());
 
 app.listen(port, () => console.log(`App is running on port ${port}`));
 
