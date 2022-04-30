@@ -2,10 +2,9 @@ import csv from "csvtojson";
 import {
   provideCore,
   AutocompleteResponse,
-  UniversalSearchResponse,
-  VerticalResults,
   Result,
   AutocompleteResult,
+  VerticalSearchResponse,
 } from "@yext/answers-core";
 import "dotenv/config";
 import type { TedTalk, TedTalkAPI } from "./types";
@@ -36,34 +35,32 @@ const TedTalksAPIService: TedTalkAPI = {
   },
 
   search: async ({ query }) => {
-    const yextResponse: UniversalSearchResponse = await core.universalSearch({
+    const yextResponse: VerticalSearchResponse = await core.verticalSearch({
+      verticalKey: "ted_talks",
       query: query,
     });
 
-    const searchResults: TedTalk[] = yextResponse.verticalResults.flatMap(
-      (verticalResult: VerticalResults) =>
-        verticalResult.results.flatMap(
-          (result: Result) =>
-            ({
-              title: result.rawData.name,
-              author: result.rawData.c_author,
-              date: result.rawData.c_postedOn,
-              views: result.rawData.c_views,
-              likes: result.rawData.c_likes,
-              link: result.rawData.c_link,
-            } as TedTalk)
-        )
-    );
+    const searchResults: TedTalk[] =
+      yextResponse.verticalResults.results.flatMap(
+        (result: Result) =>
+          ({
+            title: result.rawData.name,
+            author: result.rawData.c_author,
+            date: result.rawData.c_postedOn,
+            views: result.rawData.c_views,
+            likes: result.rawData.c_likes,
+            link: result.rawData.c_link,
+          } as TedTalk)
+      );
 
     return searchResults;
   },
 
   autocomplete: async ({ query }) => {
-    const yextResponse: AutocompleteResponse = await core.universalAutocomplete(
-      {
-        input: query,
-      }
-    );
+    const yextResponse: AutocompleteResponse = await core.verticalAutocomplete({
+      verticalKey: "ted_talks",
+      input: query,
+    });
 
     const autocompleteResults: string[] = yextResponse.results.flatMap(
       (result: AutocompleteResult) => result.value
